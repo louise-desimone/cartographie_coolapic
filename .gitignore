@@ -1,0 +1,9 @@
+# Fichiers système et d'éditeur
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+
+# Pages de test temporaires
+_test_*.html

@@ -1,0 +1,899 @@
+/* ==========================================================================
+   Cartographie Coolapic
+   1. Variables et base        5. Pile sous la barre et panneaux
+   2. En-tête et mise en page  6. Légende des habitats
+   3. Annuaire des sites       7. Météo
+   4. Barre d'outils           8. Éléments de la carte
+                               9. Petits écrans
+   ========================================================================== */
+
+/* 1. Variables et base ---------------------------------------------------- */
+
+:root {
+    color-scheme: light;
+    /* Identité visuelle Coolapic */
+    --couleur-nuit: #04002b;
+    --couleur-accent: #0ba3df;
+    --couleur-accent-clair: #38bdf8;
+    /* Textes */
+    --texte: #333333;
+    --texte-fonce: #17324d;
+    --texte-secondaire: #4c6072;
+    --titre: #064a7a;
+    --lien: #0a6aa8;
+    --erreur: #7a1e1e;
+    /* Bordures et survols des éléments clairs */
+    --bordure-claire: #a9c3d2;
+    --bordure-survol: #5c9cbd;
+    --fond-survol: #e2f1ff;
+    --separateur: #cccccc;
+    /* Encadré des contrôles, identique au zoom de Leaflet (mode tactile) ;
+       en mode souris, Leaflet remplace la bordure par une ombre. */
+    --bordure-controle: 2px solid rgba(0, 0, 0, 0.2);
+    --ombre-controle-souris: 0 1px 5px rgba(0, 0, 0, 0.65);
+    font-family: Arial, Helvetica, sans-serif;
+    color: #e0e0e0;
+    background: var(--couleur-nuit);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+    background: var(--couleur-nuit);
+}
+
+button:focus-visible,
+summary:focus-visible,
+input:focus-visible,
+a:focus-visible {
+    outline: 3px solid var(--couleur-accent-clair);
+    outline-offset: 2px;
+}
+
+/* 2. En-tête et mise en page ---------------------------------------------- */
+
+.bandeau {
+    min-height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 10px 22px;
+    color: #ffffff;
+    border-bottom: 3px solid var(--couleur-accent);
+}
+
+.bandeau-titre {
+    margin: 0;
+    font-size: 1.15rem;
+    font-weight: 700;
+}
+
+.lien-retour {
+    padding: 8px 12px;
+    border: 1px solid rgba(56, 189, 248, 0.55);
+    border-radius: 14px;
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.1);
+    font-weight: 700;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.lien-retour:hover,
+.lien-retour:focus-visible {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* Carte (75 %) et annuaire des sites (25 %). */
+.mise-en-page-carte {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 75fr) minmax(260px, 25fr);
+    height: calc(100vh - 64px);
+    min-height: 440px;
+    flex: 1 0 auto;
+}
+
+#carte {
+    width: 100%;
+    height: 100%;
+    min-height: 440px;
+    background: #c9e2ec;
+}
+
+.message-carte {
+    position: absolute;
+    z-index: 1100;
+    left: 18px;
+    bottom: 30px;
+    max-width: min(420px, calc(75% - 36px));
+    padding: 10px 13px;
+    border-radius: 6px;
+    color: var(--couleur-nuit);
+    background: #ffffff;
+    box-shadow: 0 2px 10px rgba(14, 43, 58, 0.22);
+    font-size: 0.88rem;
+}
+
+.message-carte.erreur {
+    border: 1px solid #d99a9a;
+    color: var(--erreur);
+}
+
+/* 3. Annuaire des sites ----------------------------------------------------- */
+
+.annuaire-sites {
+    display: flex;
+    min-width: 0;
+    /* Indispensable pour que la liste défile au lieu d'agrandir la page. */
+    min-height: 0;
+    flex-direction: column;
+    gap: 10px;
+    padding: 16px;
+    border-left: 1px solid var(--bordure-claire);
+    background: #f5faff;
+    overflow: hidden;
+}
+
+.recherche-sites {
+    width: 100%;
+    min-height: 40px;
+    flex: 0 0 auto;
+    padding: 8px 10px;
+    border: 1px solid var(--bordure-claire);
+    border-radius: 5px;
+    color: var(--couleur-nuit);
+    background: #ffffff;
+    font: inherit;
+}
+
+.recherche-sites:focus-visible {
+    border-color: var(--bordure-survol);
+}
+
+.recherche-sites::placeholder {
+    color: #647789;
+}
+
+.liste-sites-annuaire {
+    display: grid;
+    align-content: start;
+    gap: 7px;
+    min-height: 0;
+    flex: 1;
+    overflow-y: auto;
+    /* Le défilement de la liste n'entraîne pas la page. */
+    overscroll-behavior: contain;
+    padding-right: 4px;
+}
+
+.liste-sites-annuaire p {
+    margin: 0;
+    color: var(--texte-secondaire);
+}
+
+.geosignet-site {
+    width: 100%;
+    min-height: 42px;
+    display: flex;
+    padding: 8px 10px;
+    border: 1px solid var(--bordure-claire);
+    border-radius: 10px;
+    color: var(--texte-fonce);
+    background: #ffffff;
+    text-align: left;
+    cursor: pointer;
+    transition: background 0.12s ease, border-color 0.12s ease;
+}
+
+.geosignet-site:hover,
+.geosignet-site:focus-visible {
+    border-color: var(--bordure-survol);
+    background: var(--fond-survol);
+}
+
+.geosignet-infos {
+    display: grid;
+    gap: 2px;
+    min-width: 0;
+}
+
+.geosignet-nom {
+    font-weight: 700;
+}
+
+.geosignet-ville {
+    color: var(--texte-secondaire);
+    font-size: 0.82rem;
+}
+
+/* 4. Barre d'outils (haut à droite) : un seul bloc encadré, comme le zoom. */
+
+.leaflet-top.leaflet-right {
+    display: flex;
+    margin: 10px 10px 0 0;
+    border: var(--bordure-controle);
+    border-radius: 4px;
+    background: #ffffff;
+    background-clip: padding-box;
+    pointer-events: auto;
+}
+
+.leaflet-top.leaflet-right > .leaflet-control {
+    position: static;
+    float: none;
+    clear: none;
+    display: flex;
+    margin: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+}
+
+/* Le bouton d'information est toujours le premier de la barre. */
+.leaflet-top.leaflet-right > .controle-informations {
+    order: -1;
+}
+
+.bouton-barre-outils,
+.leaflet-control-geosearch a.leaflet-bar-part {
+    /* Repère de l'indicateur de chargement du module de recherche. */
+    position: relative;
+    width: 30px;
+    height: 30px;
+    display: grid;
+    place-items: center;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-right: 1px solid var(--separateur);
+    border-radius: 0;
+    color: var(--texte);
+    background-color: #ffffff;
+    appearance: none;
+    font: inherit;
+    cursor: pointer;
+}
+
+.bouton-informations {
+    border-radius: 2px 0 0 2px;
+}
+
+.bouton-couches {
+    border-right: 0;
+    border-radius: 0 2px 2px 0;
+}
+
+.icone-barre-outils {
+    display: block;
+    width: 18px;
+    height: 18px;
+}
+
+.bouton-barre-outils:hover,
+.bouton-barre-outils:focus-visible,
+.leaflet-control-geosearch a.leaflet-bar-part:hover,
+.leaflet-control-geosearch a.leaflet-bar-part:focus-visible {
+    background-color: #f4f4f4;
+}
+
+.bouton-barre-outils[aria-pressed="true"],
+.bouton-barre-outils[aria-expanded="true"],
+.leaflet-control-geosearch.active a.leaflet-bar-part {
+    color: var(--titre);
+    background-color: var(--fond-survol);
+}
+
+.bouton-barre-outils:disabled {
+    cursor: progress;
+}
+
+/* Loupe de la recherche d'adresses, dessinée comme les autres icônes ; le
+   module la dessine en CSS (::before / ::after), retirés ici. */
+.leaflet-top.leaflet-right .leaflet-control-geosearch a.leaflet-bar-part {
+    border-radius: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23333333' stroke-width='2' stroke-linecap='round'%3E%3Ccircle cx='10.5' cy='10.5' r='6.5'/%3E%3Cpath d='m15.5 15.5 5 5'/%3E%3C/svg%3E");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 18px 18px;
+}
+
+.leaflet-control-geosearch a.leaflet-bar-part::before,
+.leaflet-control-geosearch:not(.pending):not(.error) a.leaflet-bar-part::after {
+    display: none;
+}
+
+.leaflet-top.leaflet-right .leaflet-control-geosearch.pending a.leaflet-bar-part,
+.leaflet-top.leaflet-right .leaflet-control-geosearch.error a.leaflet-bar-part {
+    background-image: none;
+}
+
+/* Mode souris de Leaflet : zoom en 26 px avec une ombre ; la barre suit. */
+.leaflet-container:not(.leaflet-touch) .leaflet-top.leaflet-right {
+    border: 0;
+    box-shadow: var(--ombre-controle-souris);
+}
+
+.leaflet-container:not(.leaflet-touch) .bouton-barre-outils,
+.leaflet-container:not(.leaflet-touch) .leaflet-control-geosearch a.leaflet-bar-part {
+    width: 26px;
+    height: 26px;
+}
+
+.leaflet-container:not(.leaflet-touch) .icone-barre-outils {
+    width: 16px;
+    height: 16px;
+}
+
+.leaflet-container:not(.leaflet-touch) .leaflet-top.leaflet-right .leaflet-control-geosearch a.leaflet-bar-part {
+    background-size: 16px 16px;
+}
+
+/* 5. Pile sous la barre et panneaux ------------------------------------------
+   Couches, recherche, informations, légende et heure météo s'empilent,
+   alignés à droite, dans l'ordre d'ouverture (propriété order du script). */
+
+.zone-sous-barre {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: -2px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
+    width: max-content;
+    max-width: calc(100vw - 32px);
+    /* Sous l'en-tête et la barre : la pile défile si elle dépasse la carte. */
+    max-height: calc(100vh - 170px);
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+/* Même encadré pour tout ce qui est dans la pile et pour les coordonnées. */
+.zone-sous-barre > *,
+.coordonnees-carte {
+    flex: 0 0 auto;
+    max-width: 100%;
+    border: var(--bordure-controle);
+    border-radius: 4px;
+    color: var(--texte);
+    background: #ffffff;
+    background-clip: padding-box;
+    box-shadow: none;
+}
+
+.leaflet-container:not(.leaflet-touch) .zone-sous-barre > *,
+.leaflet-container:not(.leaflet-touch) .coordonnees-carte {
+    border: 0;
+    box-shadow: var(--ombre-controle-souris);
+}
+
+/* L'attribut hidden l'emporte sur les display des éléments de la pile. */
+.zone-sous-barre > [hidden],
+.reglage-opacite[hidden] {
+    display: none !important;
+}
+
+.zone-sous-barre > .leaflet-control {
+    float: none;
+    clear: none;
+    margin: 0;
+}
+
+/* En-tête d'un panneau : titre éventuel à gauche, croix à droite. */
+.entete-panneau {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 12px;
+    padding-bottom: 8px;
+}
+
+.entete-panneau h2 {
+    margin: 0 auto 0 0;
+    color: var(--titre);
+    font-size: 1rem;
+}
+
+.bouton-fermer-panneau {
+    width: 30px;
+    height: 30px;
+    display: grid;
+    place-items: center;
+    flex: 0 0 30px;
+    padding: 0;
+    border: 1px solid var(--bordure-claire);
+    border-radius: 6px;
+    color: var(--titre);
+    background: #ffffff;
+    font: inherit;
+    font-size: 1.25rem;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.bouton-fermer-panneau:hover,
+.bouton-fermer-panneau:focus-visible,
+.bouton-copier-flux:hover,
+.bouton-copier-flux:focus-visible {
+    border-color: var(--bordure-survol);
+    background: var(--fond-survol);
+}
+
+/* Recherche d'adresses : formulaire du module, sorti de la barre. */
+.leaflet-top.leaflet-right .enveloppe-recherche form {
+    position: static;
+    width: min(320px, calc(100vw - 40px));
+    max-width: none;
+    border: 0;
+    border-radius: 2px;
+    box-shadow: none;
+}
+
+.leaflet-control-geosearch form input {
+    border-radius: 2px;
+}
+
+/* Panneau des couches. */
+.contenu-couches-thematiques {
+    width: max-content;
+    padding: 6px 10px 6px 6px;
+    color: var(--couleur-nuit);
+    font-size: 0.85rem;
+}
+
+.liste-groupes-couches {
+    max-height: min(55vh, 400px);
+    overflow-y: auto;
+}
+
+.groupe-couches + .groupe-couches {
+    margin-top: 12px;
+}
+
+.titre-groupe-couches {
+    margin: 0 0 4px;
+    color: var(--titre);
+    font-size: 0.85rem;
+    line-height: 1.2;
+}
+
+.option-couche {
+    display: flex;
+    align-items: center;
+    min-height: 22px;
+    padding: 1px 0;
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+.option-couche input {
+    flex: 0 0 16px;
+    width: 16px;
+    height: 16px;
+    margin: 0 12px 0 1px;
+}
+
+/* Curseur d'opacité, aligné sous le nom de la couche. */
+.reglage-opacite {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0 0 4px 29px;
+    color: var(--texte-secondaire);
+    font-size: 0.78rem;
+}
+
+.reglage-opacite input {
+    width: 140px;
+    margin: 0;
+    accent-color: var(--titre);
+    cursor: pointer;
+}
+
+.reglage-opacite output {
+    min-width: 3.2em;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+}
+
+/* Panneau « À propos ». */
+.contenu-informations {
+    width: min(420px, calc(100vw - 32px));
+    max-height: min(70vh, 560px);
+    overflow-y: auto;
+    padding: 8px 14px 12px;
+    font-size: 0.82rem;
+    line-height: 1.45;
+}
+
+.contenu-informations h3 {
+    margin: 14px 0 6px;
+    color: var(--titre);
+    font-size: 0.85rem;
+}
+
+.contenu-informations p {
+    margin: 8px 0 0;
+}
+
+.contenu-informations dl,
+.contenu-informations dd {
+    margin: 0;
+}
+
+.contenu-informations dt {
+    margin-top: 6px;
+    font-weight: 700;
+}
+
+.contenu-informations a {
+    color: var(--lien);
+}
+
+.contenu-informations a:hover {
+    color: var(--titre);
+}
+
+.liens-informations {
+    margin: 0;
+    padding-left: 18px;
+}
+
+.liens-informations li + li {
+    margin-top: 6px;
+}
+
+/* Flux de données : adresses en clair, faciles à copier. */
+.flux-informations {
+    margin: 6px 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+.flux-informations li + li {
+    margin-top: 10px;
+}
+
+.type-flux,
+.couches-flux {
+    color: var(--texte-secondaire);
+}
+
+.url-flux {
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+    margin-top: 3px;
+}
+
+.url-flux code {
+    flex: 1;
+    min-width: 0;
+    padding: 4px 6px;
+    border: 1px solid #c5d4db;
+    border-radius: 4px;
+    color: var(--texte-fonce);
+    background: #f3f7fa;
+    font-family: Consolas, "Courier New", monospace;
+    font-size: 0.74rem;
+    overflow-wrap: anywhere;
+    user-select: all;
+}
+
+.bouton-copier-flux {
+    min-width: 76px;
+    min-height: 26px;
+    padding: 4px 8px;
+    border: 1px solid var(--bordure-claire);
+    border-radius: 4px;
+    color: var(--titre);
+    background: #ffffff;
+    font: inherit;
+    font-size: 0.75rem;
+    cursor: pointer;
+}
+
+.couches-flux {
+    margin-top: 3px;
+    font-size: 0.74rem;
+    overflow-wrap: anywhere;
+}
+
+/* 6. Légende des habitats ----------------------------------------------------- */
+
+.legende-habitats {
+    max-width: min(320px, calc(100vw - 32px));
+    padding: 0 10px;
+    font-size: 0.8rem;
+}
+
+.legende-habitats[open] {
+    padding-bottom: 8px;
+}
+
+.legende-habitats summary {
+    min-height: 30px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 700;
+    list-style: none;
+    cursor: pointer;
+}
+
+.leaflet-container:not(.leaflet-touch) .legende-habitats summary {
+    min-height: 26px;
+}
+
+.legende-habitats summary::-webkit-details-marker {
+    display: none;
+}
+
+.legende-habitats summary:hover {
+    color: var(--titre);
+}
+
+/* Chevron dessiné en CSS, dans le même trait que les icônes de la barre. */
+.legende-habitats summary::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    flex: 0 0 6px;
+    margin: 0 3px 0 2px;
+    border-right: 2px solid currentColor;
+    border-bottom: 2px solid currentColor;
+    transform: rotate(-45deg);
+    transition: transform 0.15s ease;
+}
+
+.legende-habitats[open] summary::before {
+    transform: rotate(45deg);
+}
+
+.legende-habitats-liste {
+    display: grid;
+    gap: 6px;
+    max-height: 260px;
+    margin-top: 2px;
+    overflow-y: auto;
+}
+
+.element-legende-habitat {
+    display: flex;
+    align-items: flex-start;
+    gap: 7px;
+}
+
+.couleur-legende-habitat {
+    width: 13px;
+    height: 13px;
+    flex: 0 0 13px;
+    margin-top: 2px;
+    border: 1px solid rgba(0, 0, 0, 0.4);
+    border-radius: 2px;
+}
+
+/* 7. Météo ------------------------------------------------------------------ */
+
+/* Boîtier de l'heure de prévision et légendes. */
+.controle-meteo {
+    width: 240px;
+    padding: 6px 10px 8px;
+    font-size: 0.78rem;
+}
+
+.titre-controle-meteo {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    font-weight: 700;
+}
+
+.heure-meteo {
+    color: var(--titre);
+    font-variant-numeric: tabular-nums;
+}
+
+.curseur-meteo {
+    width: 100%;
+    margin: 6px 0 4px;
+    accent-color: var(--titre);
+    cursor: pointer;
+}
+
+.bloc-legende-meteo + .bloc-legende-meteo {
+    margin-top: 6px;
+}
+
+.titre-legende-meteo {
+    margin-top: 2px;
+    color: var(--texte-secondaire);
+    font-size: 0.72rem;
+}
+
+.legende-meteo {
+    display: flex;
+    gap: 2px;
+}
+
+.legende-meteo span {
+    flex: 1;
+    padding: 1px 0;
+    border-top: 4px solid var(--couleur-classe);
+    color: var(--texte-secondaire);
+    font-size: 0.66rem;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.statut-meteo {
+    margin-top: 4px;
+    color: var(--erreur);
+}
+
+/* Flèches de vent. */
+.icone-vent,
+.icone-temperature-eau {
+    border: 0;
+    background: transparent;
+}
+
+.fleche-vent {
+    position: relative;
+    width: 34px;
+    height: 34px;
+    display: grid;
+    place-items: center;
+    filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.45));
+}
+
+.fleche-vent svg {
+    display: block;
+}
+
+.vitesse-vent {
+    position: absolute;
+    left: 50%;
+    top: 100%;
+    transform: translate(-50%, -6px);
+    padding: 0 3px;
+    border-radius: 3px;
+    color: var(--texte-fonce);
+    background: rgba(255, 255, 255, 0.88);
+    font-size: 0.68rem;
+    font-weight: 700;
+    line-height: 1.3;
+}
+
+/* Étiquettes de température de l'eau en surface. */
+.etiquette-temperature-eau {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 44px;
+    height: 22px;
+    padding: 0 6px;
+    border: 2px solid var(--couleur-eau);
+    border-radius: 11px;
+    color: var(--texte-fonce);
+    background: #ffffff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+    font-size: 0.75rem;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+}
+
+.popup-meteo {
+    line-height: 1.45;
+}
+
+.source-popup-meteo {
+    margin: 6px 0 0;
+    color: #6b7c8c;
+    font-size: 0.72rem;
+}
+
+/* 8. Éléments de la carte ----------------------------------------------------- */
+
+.icone-site-plongee span {
+    width: 46px;
+    height: 46px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.icone-site-plongee img {
+    display: block;
+    width: 44px;
+    height: 40px;
+    object-fit: contain;
+}
+
+.popup-site-plongee p {
+    margin: 6px 0 0;
+}
+
+/* En bas à gauche : l'échelle puis les coordonnées. Leaflet insère les
+   contrôles du bas en tête, d'où l'ordre inversé. */
+.leaflet-bottom.leaflet-left {
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    gap: 8px;
+    margin: 0 0 10px 10px;
+}
+
+.leaflet-bottom.leaflet-left > .leaflet-control {
+    float: none;
+    clear: none;
+    margin: 0;
+}
+
+.coordonnees-carte {
+    min-width: 190px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 0 10px;
+    font-size: 0.78rem;
+    font-variant-numeric: tabular-nums;
+    white-space: pre;
+}
+
+.leaflet-container:not(.leaflet-touch) .coordonnees-carte {
+    height: 26px;
+}
+
+/* 9. Petits écrans ---------------------------------------------------------- */
+
+@media (max-width: 600px) {
+    .leaflet-top.leaflet-right > .leaflet-control-geosearch,
+    .coordonnees-carte {
+        display: none;
+    }
+
+    .bandeau {
+        min-height: 58px;
+        padding: 8px 12px;
+    }
+
+    .bandeau-titre {
+        font-size: 1rem;
+    }
+
+    .lien-retour {
+        padding: 7px 9px;
+        font-size: 0.82rem;
+    }
+
+    .mise-en-page-carte {
+        grid-template-columns: 1fr;
+        grid-template-rows: minmax(360px, 65vh) minmax(220px, 35vh);
+        height: calc(100vh - 58px);
+    }
+
+    #carte {
+        min-height: 360px;
+    }
+
+    .annuaire-sites {
+        border-top: 1px solid #c5d4db;
+        border-left: 0;
+    }
+
+    .message-carte {
+        max-width: calc(100vw - 36px);
+    }
+}

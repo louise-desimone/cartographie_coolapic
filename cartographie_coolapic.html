@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta
+        name="description"
+        content="Carte interactive des sites et profondeurs de plongée Coolapic."
+    >
+    <meta name="theme-color" content="#04002b">
+    <title>Cartographie Coolapic</title>
+
+    <!-- Bibliothèques : Leaflet (carte) et leaflet-geosearch (adresses). -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/leaflet-geosearch@5.3.0/dist/geosearch.css"
+    >
+    <link rel="stylesheet" href="css/style.css?v=2026-11-20">
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" defer></script>
+    <script
+        src="https://cdn.jsdelivr.net/npm/leaflet-geosearch@5.3.0/dist/bundle.min.js"
+        defer
+    ></script>
+
+    <!-- Modules de la carte, dans l'ordre où ils dépendent les uns des autres.
+         Changer « v= » après une modification force le rechargement. -->
+    <script src="js/utilitaires.js?v=2026-11-20" defer></script>
+    <script src="js/carte.js?v=2026-11-20" defer></script>
+    <script src="js/barre-outils.js?v=2026-11-20" defer></script>
+    <script src="js/a-propos.js?v=2026-11-20" defer></script>
+    <script src="js/meteo.js?v=2026-11-20" defer></script>
+    <script src="js/sites-plongee.js?v=2026-11-20" defer></script>
+    <script src="js/biodiversite-ofb.js?v=2026-11-20" defer></script>
+    <script src="js/controle-couches.js?v=2026-11-20" defer></script>
+    <script src="js/application.js?v=2026-11-20" defer></script>
+</head>
+<body>
+    <header class="bandeau">
+        <p class="bandeau-titre">Coolapic · Cartographie</p>
+        <a class="lien-retour" href="https://coolapic.net/index.php">
+            Retour au site du club
+        </a>
+    </header>
+
+    <main class="mise-en-page-carte">
+        <div
+            id="carte"
+            role="application"
+            aria-label="Carte interactive des sites et profondeurs de plongée"
+        ></div>
+
+        <aside class="annuaire-sites" aria-label="Annuaire des sites de plongée">
+            <input
+                id="recherche-sites"
+                class="recherche-sites"
+                type="search"
+                placeholder="Rechercher un site"
+                aria-label="Rechercher un site par nom ou ville"
+            >
+            <div id="liste-sites-annuaire" class="liste-sites-annuaire"></div>
+        </aside>
+
+        <div id="message-carte" class="message-carte" role="status" aria-live="polite">
+            Chargement de la carte…
+        </div>
+    </main>
+</body>
+</html>

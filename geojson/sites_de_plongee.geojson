@@ -1,0 +1,246 @@
+{
+  "type": "FeatureCollection",
+  "name": "sites_de_plongee",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "site-la-balise-cannonier-sud",
+      "properties": {
+        "nom": "La Balise (Cannonier sud)",
+        "ville": "La Ciotat",
+        "commentaire": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          5.6122873,
+          43.16039
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "site-petite-calanque",
+      "properties": {
+        "nom": "Petite Calanque",
+        "ville": "La Ciotat",
+        "commentaire": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          5.6155677,
+          43.1600734
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "site-les-moyades",
+      "properties": {
+        "nom": "Les Moyades",
+        "ville": "Marseille",
+        "commentaire": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          5.3701316,
+          43.1768196
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "site-boulegeade",
+      "properties": {
+        "nom": "Boulegeade",
+        "ville": "Marseille",
+        "commentaire": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          5.3731413,
+          43.1775895
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "site-sec-de-la-gabiniere",
+      "properties": {
+        "nom": "Sec de la Gabinière",
+        "ville": "Marseille",
+        "commentaire": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          6.3950529,
+          42.9882676
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "site-le-dalton",
+      "properties": {
+        "nom": "Le Dalton",
+        "ville": "Marseille",
+        "commentaire": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          5.2301641,
+          43.1989772
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "site-pointe-du-vaisseau",
+      "properties": {
+        "nom": "Pointe du Vaisseau",
+        "ville": "Hyères",
+        "commentaire": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          6.4064712,
+          42.9956705
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "site-pointe-de-la-galere",
+      "properties": {
+        "nom": "Pointe de la Galère",
+        "ville": "Hyères",
+        "commentaire": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          6.4089778,
+          43.019793
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "site-les-pyramides",
+      "properties": {
+        "nom": "Les Pyramides",
+        "ville": "Fréjus",
+        "commentaire": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          6.8431624,
+          43.4084849
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "site-le-lion-de-mer",
+      "properties": {
+        "nom": "Le Lion de Mer",
+        "ville": "Fréjus",
+        "commentaire": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          6.7740388,
+          43.4071362
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "site-seynerolles",
+      "properties": {
+        "nom": "Seynerolles",
+        "ville": "La Ciotat",
+        "commentaire": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          5.6206972,
+          43.1594527
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "site-les-deux-freres",
+      "properties": {
+        "nom": "Les deux frères",
+        "ville": "Saint Mandrier",
+        "commentaire": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          5.8682755,
+          43.0486341
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "site-fourmigues",
+      "properties": {
+        "nom": "Fourmigues",
+        "ville": "Hyères",
+        "commentaire": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          6.0692624,
+          43.0399863
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "site-les-pharillons",
+      "properties": {
+        "nom": "Les Pharillons",
+        "ville": "Marseille",
+        "commentaire": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          5.3379103,
+          43.2076215
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "site-cap-de-labeille",
+      "properties": {
+        "nom": "Cap de l’Abeille",
+        "ville": "Banyuls-sur-Mer",
+        "commentaire": ""
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          3.154981,
+          42.4768109
+        ]
+      }
+    }
+  ]
+}
