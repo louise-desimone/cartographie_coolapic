@@ -25,3 +25,31 @@ mnt/
 
 Une fois les profondeurs calculées, ces fichiers peuvent être supprimés : les
 résultats sont dans `geojson/sites_de_plongee.geojson`.
+
+## Dalle d'exemple
+
+Une seule dalle est versionnée, pour montrer à quoi ressemble un MNT et
+pouvoir lancer le script sans rien télécharger :
+
+`litto3d/LITTO3D_PACA_2015_PACK_DL/0910_6235/LITTO3D_FRA_0912_6233_20150529_LAMB93_RGF93_IGN69/MNT1m/LITTO3D_FRA_0912_6233_MNT_20150128_LAMB93_RGF93_IGN69.asc`
+
+Elle couvre 1 km² autour de la Petite Calanque (île Verte, La Ciotat). C'est
+une grille texte (format ASCII ESRI) de 1 000 × 1 000 cellules de 1 m :
+
+```
+ncols 1000             nombre de colonnes
+nrows 1000             nombre de lignes
+xllcenter 912000.000   coin sud-ouest, en Lambert-93 (m)
+yllcenter 6232001.000
+cellsize 1.0000        taille d'une cellule : 1 m
+nodata_value -99999    valeur des cellules sans donnée
+6.470 6.300 6.240 …    altitudes IGN69 en m, ligne par ligne du nord au sud
+                       (positives à terre, négatives en mer)
+```
+
+Une altitude négative est une profondeur : -12,3 signifie 12,3 m sous le
+niveau de référence. Le nom de la dalle donne son coin nord-ouest en km
+(0912 = 912 km à l'est, 6233 = 6 233 km au nord) et sa date d'acquisition.
+
+Source : Litto3D PACA 2015, © IGN / Shom, sous Licence Ouverte Etalab 2.0
+(réutilisation libre en citant la source).

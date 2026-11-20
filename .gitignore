@@ -8,6 +8,10 @@ desktop.ini
 # Pages de test temporaires
 _test_*.html
 
-# MNT (plusieurs centaines de Mo) : seul le fichier d'explication est suivi
+# MNT (plusieurs centaines de Mo) : seuls le fichier d'explication et une
+# dalle d'exemple (ajoutée avec « git add -f ») sont suivis
 mnt/*
 !mnt/LISEZMOI.md
+
+# Cache Python
+__pycache__/
