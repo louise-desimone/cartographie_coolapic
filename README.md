@@ -86,7 +86,7 @@ dans un rayon de 30 m (réglage `RAYON_M`). Sans Litto3D, il se rabat sur le MNT
 de façade HOMONIM à 100 m. Il s'exécute avec le Python d'ArcGIS Pro (GDAL) :
 
 ```powershell
-& "C:\Program Files\ArcGIS\Proin\Python\envsrcgispro-py3\python.exe" outils\profondeur_sites.py
+& "C:\Program Files\ArcGIS\Pro\bin\Python\envs\arcgispro-py3\python.exe" outils\profondeur_sites.py
 ```
 
 - `--inventaire` liste les paquets Litto3D nécessaires ;
