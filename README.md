@@ -91,10 +91,10 @@ de façade HOMONIM à 100 m. Il s'exécute avec le Python d'ArcGIS Pro (GDAL) :
 
 - `--inventaire` liste les paquets Litto3D nécessaires ;
 - `--telecharger` les télécharge depuis le Shom (environ 80 Mo chacun,
-  7-Zip requis), hors du dépôt, dans `calcul_profondeur/litto3d_sites`.
+  7-Zip requis) et n'en garde que les MNT à 1 m.
 
-Les données sources ne sont pas dans le dépôt : le script les cherche dans le
-dossier parent (`la_ciotat/`, `calcul_profondeur/`, `data/`).
+Les MNT sont rangés dans le dossier `mnt/`, exclu de Git car trop lourd pour
+GitHub : voir `mnt/LISEZMOI.md` pour son organisation.
 
 ## Organisation du code
 

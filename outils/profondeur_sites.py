@@ -13,7 +13,8 @@ Lancement, avec le Python d'ArcGIS Pro (GDAL y est fourni) :
     "C:\\Program Files\\ArcGIS\\Pro\\bin\\Python\\envs\\arcgispro-py3\\python.exe" outils\\profondeur_sites.py
 Options :
     --telecharger   télécharge les paquets Litto3D manquants depuis le Shom
-                    (environ 80 Mo par paquet ; 7-Zip requis) ;
+                    (environ 80 Mo par paquet ; 7-Zip requis) ; seuls les
+                    MNT à 1 m sont gardés, dans le dossier mnt/ ;
     --inventaire    liste seulement les paquets nécessaires, sans rien écrire.
 
 Références verticales : Litto3D est en IGN69, HOMONIM au niveau moyen (NM) ;
@@ -40,16 +41,13 @@ gdal.UseExceptions()
 RAYON_M = 30  # rayon autour du site pour la plage de profondeurs
 
 DEPOT = Path(__file__).resolve().parents[1]           # cartographie_web
-PROJET = DEPOT.parent                                  # dossier coolapic
 FICHIER_SITES = DEPOT / "geojson" / "sites_de_plongee.geojson"
-# Dossiers où chercher des dalles Litto3D déjà extraites (MNT 1 m, .asc).
-DOSSIERS_LITTO3D = [
-    PROJET / "la_ciotat",
-    PROJET / "calcul_profondeur" / "litto3d_auto",
-    PROJET / "calcul_profondeur" / "litto3d_sites",
-]
-DOSSIER_TELECHARGEMENT = PROJET / "calcul_profondeur" / "litto3d_sites"
-MNT_HOMONIM = (PROJET / "data" / "MNT_FACADE_GDL-CA_HOMONIM_NM" / "DONNEES"
+# Dossier des MNT, exclu de Git (fichiers trop lourds pour GitHub).
+#   mnt/litto3d/<collection Shom>/<paquet>/…/MNT1m/*.asc  dalles Litto3D 1 m
+#   mnt/homonim/MNT_MED100m_…_ZNEG.asc                    MNT de façade 100 m
+DOSSIER_MNT = DEPOT / "mnt"
+DOSSIER_LITTO3D = DOSSIER_MNT / "litto3d"
+MNT_HOMONIM = (DOSSIER_MNT / "homonim"
                / "MNT_MED100m_GDL-CA_HOMONIM_WGS84_NM_ZNEG.asc")
 
 # Collections Litto3D du Shom, de la moins à la plus prioritaire : là où
@@ -123,30 +121,19 @@ class Dalle:
 
 
 def libelle_source(chemin):
-    texte = str(chemin).upper()
-    for collection, libelle in reversed(COLLECTIONS):
-        if collection in texte:
+    """Édition Litto3D, d'après le dossier de collection du paquet."""
+    for collection, libelle in COLLECTIONS:
+        if collection in chemin.parts:
             return libelle
-    if "PACA_2015" in texte:
-        return "Litto3D PACA 2015"
     return "Litto3D"
 
 
 def lister_dalles():
-    dalles = []
-    for dossier in DOSSIERS_LITTO3D:
-        if not dossier.is_dir():
-            continue
-        for chemin in dossier.rglob("*_MNT_*.asc"):
-            # Seulement le MNT à 1 m (les dossiers MNT5m sont ignorés).
-            if chemin.parent.name.upper() == "MNT1M":
-                dalles.append(Dalle(chemin))
-    # La source XML du paquet indique l'édition PACA 2015.
-    for dalle in dalles:
-        xml = list(dalle.chemin.parents[2].glob("*PACA_2015*.xml"))
-        if xml and dalle.source == "Litto3D":
-            dalle.source = "Litto3D PACA 2015"
-    return dalles
+    if not DOSSIER_LITTO3D.is_dir():
+        return []
+    # Seulement le MNT à 1 m (les dossiers MNT5m éventuels sont ignorés).
+    return [Dalle(chemin) for chemin in DOSSIER_LITTO3D.rglob("*_MNT_*.asc")
+            if chemin.parent.name.upper() == "MNT1M"]
 
 
 # --- Calcul de la profondeur d'un site ----------------------------------------
@@ -233,7 +220,7 @@ def emprise_paquet(identifiant, cache):
 
 def paquets_pour(sites_manquants):
     """Paquet Litto3D le plus récent couvrant chaque site sans dalle locale."""
-    cache = DOSSIER_TELECHARGEMENT / "catalogue"
+    cache = DOSSIER_LITTO3D / "catalogue"
     cache.mkdir(parents=True, exist_ok=True)
     choix = {}
     for priorite, (collection, libelle) in enumerate(COLLECTIONS):
@@ -266,7 +253,7 @@ def chemin_7zip():
 
 
 def telecharger_paquet(paquet, sept_zip):
-    dossier = DOSSIER_TELECHARGEMENT / paquet["collection"]
+    dossier = DOSSIER_LITTO3D / paquet["collection"]
     dossier.mkdir(parents=True, exist_ok=True)
     archive = dossier / (paquet["nom"] + ".7z")
     extrait = dossier / paquet["nom"]
@@ -299,6 +286,7 @@ def telecharger_paquet(paquet, sept_zip):
         subprocess.run([sept_zip, "x", "-y", "-o" + str(extrait), str(archive), nom],
                        check=True, stdout=subprocess.DEVNULL)
     (extrait / "extraction_ok").touch()
+    archive.unlink()  # les MNT utiles sont extraits : l'archive ne sert plus
 
 
 # --- Programme principal -------------------------------------------------------

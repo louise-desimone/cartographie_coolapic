@@ -7,3 +7,7 @@ desktop.ini
 
 # Pages de test temporaires
 _test_*.html
+
+# MNT (plusieurs centaines de Mo) : seul le fichier d'explication est suivi
+mnt/*
+!mnt/LISEZMOI.md
