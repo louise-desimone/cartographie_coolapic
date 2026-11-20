@@ -24,7 +24,8 @@
       "properties": {
         "nom": "Petite Calanque",
         "ville": "La Ciotat",
-        "commentaire": ""
+        "commentaire": "",
+        "photo": "jpeg/IMG-20261114-WA0005.jpg"
       },
       "geometry": {
         "type": "Point",

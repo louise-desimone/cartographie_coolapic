@@ -82,7 +82,9 @@ const coucheIsobathesDonia = L.tileLayer.wms(URL_WMS_DONIA, {
         'Isobathes : <a href="https://plateforme.medtrix.fr/">MEDTRIX</a> (DONIA)',
 });
 
-fondCartesLittorales.addTo(carte);
+// Fond affiché avant que le panneau des couches applique les choix
+// enregistrés ; le même que le fond par défaut, pour éviter un changement.
+fondPlanIGNV2.addTo(carte);
 L.control.scale({ metric: true, imperial: false }).addTo(carte);
 
 // Coordonnées du pointeur, à côté de l'échelle.

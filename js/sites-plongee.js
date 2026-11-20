@@ -40,6 +40,9 @@ function siteEstValide(entite) {
             proprietes.nom.trim() &&
             typeof proprietes.ville === "string" &&
             typeof proprietes.commentaire === "string" &&
+            // Photo facultative : chemin d'une image du site.
+            (proprietes.photo === undefined ||
+                typeof proprietes.photo === "string") &&
             geometrie &&
             geometrie.type === "Point" &&
             Array.isArray(coordonnees) &&
@@ -72,6 +75,21 @@ function creerPopupSite(proprietes) {
         L.DomUtil.create("p", "", contenu).textContent =
             "Commentaire : " + proprietes.commentaire;
     }
+    if (proprietes.photo) {
+        // Un clic ouvre la photo en grand dans un nouvel onglet.
+        const lien = L.DomUtil.create("a", "lien-photo-site", contenu);
+        lien.href = proprietes.photo;
+        lien.target = "_blank";
+        lien.rel = "noopener";
+        lien.title = "Agrandir la photo";
+        const image = L.DomUtil.create("img", "photo-site-plongee", lien);
+        image.src = proprietes.photo;
+        image.alt = "Photo du site " + proprietes.nom;
+        // Proportions connues d'avance (4:3) : la fiche garde sa taille
+        // pendant le chargement de l'image et reste bien placée.
+        image.width = 240;
+        image.height = 180;
+    }
     return contenu;
 }
 
@@ -88,11 +106,17 @@ function comparerSites(premier, second) {
     );
 }
 
+// Centre la carte sur un site, au zoom 17 au moins.
+function zoomerSurSite(marqueur) {
+    carte.setView(marqueur.getLatLng(), Math.max(carte.getZoom(), 17));
+}
+
+// Depuis l'annuaire : affiche la couche si besoin, zoome et ouvre la fiche.
 function afficherSite(site) {
     if (!carte.hasLayer(coucheSitesPlongee)) {
         coucheSitesPlongee.addTo(carte);
     }
-    carte.setView(site.marqueur.getLatLng(), Math.max(carte.getZoom(), 17));
+    zoomerSurSite(site.marqueur);
     site.marqueur.openPopup();
 }
 
@@ -145,11 +169,15 @@ function chargerSitesPlongee(collection) {
                 texteRecherche: normaliserTexteRecherche(
                     proprietes.nom + " " + proprietes.ville
                 ),
+                // Un clic sur le marqueur ouvre la fiche et zoome sur le site.
                 marqueur: L.marker([latitude, longitude], {
                     icon: iconeSitePlongee,
                     bubblingMouseEvents: false,
                 })
                     .bindPopup(creerPopupSite(proprietes))
+                    .on("click", function (evenement) {
+                        zoomerSurSite(evenement.target);
+                    })
                     .addTo(coucheSitesPlongee),
             };
         })

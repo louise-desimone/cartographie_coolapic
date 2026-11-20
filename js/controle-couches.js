@@ -3,8 +3,16 @@
 // Panneau des couches : fond de plan, couches thématiques, curseurs
 // d'opacité, et mémorisation de ces choix dans le navigateur.
 
-const CLE_PREFERENCES_COUCHES = "coolapic.couches.v1";
+// Changer le numéro de version de la clé efface les choix enregistrés :
+// tout le monde repart des couches par défaut ci-dessous.
+const CLE_PREFERENCES_COUCHES = "coolapic.couches.v2";
 const PREFIXE_MESSAGE_PREFERENCES = "Les préférences de couches";
+
+// Couches affichées tant qu'aucun choix n'est enregistré dans le navigateur.
+const COUCHES_PAR_DEFAUT = {
+    fond: "plan-ign",
+    couches: ["meteo-vent-vagues", "isobathes-donia", "sites-plongee"],
+};
 
 function definirGroupesCouches() {
     return [
@@ -200,10 +208,7 @@ function creerControleCouches() {
     }
 
     function restaurerPreferences() {
-        const preferences = lirePreferencesCouches();
-        if (!preferences) {
-            return;
-        }
+        const preferences = lirePreferencesCouches() || COUCHES_PAR_DEFAUT;
         const fondChoisi = fonds.find(function (definition) {
             return definition.id === preferences.fond;
         });

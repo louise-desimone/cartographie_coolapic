@@ -26,7 +26,11 @@ d'adresses, isobathes, habitats OFB et météo sont chargés à la demande.
 
 ## Fonctionnalités
 
-À l'ouverture, la carte se cadre sur l'ensemble des sites de plongée.
+À l'ouverture, la carte se cadre sur l'ensemble des sites de plongée. Par
+défaut, elle affiche le Plan IGN, le vent, les isobathes DONIA et les sites
+(constante `COUCHES_PAR_DEFAUT` de `js/controle-couches.js`). Un clic sur un
+site, sur la carte ou dans l'annuaire, zoome dessus et ouvre sa fiche, avec
+sa photo s'il en a une (propriété `photo` du GeoJSON, images dans `jpeg/`).
 
 **Couches** (bouton en haut à droite) :
 
@@ -64,12 +68,13 @@ point avec trois propriétés obligatoires, de type texte :
 {
   "type": "Feature",
   "id": "site-nom-du-site",
-  "properties": { "nom": "Nom du site", "ville": "Commune", "commentaire": "" },
+  "properties": { "nom": "Nom du site", "ville": "Commune", "commentaire": "", "photo": "jpeg/photo.jpg" },
   "geometry": { "type": "Point", "coordinates": [5.6122873, 43.16039] }
 }
 ```
 
-Les coordonnées sont dans l'ordre **longitude, latitude**. Une fiche invalide
+Les coordonnées sont dans l'ordre **longitude, latitude**. La propriété
+`photo` est facultative. Une fiche invalide
 empêche le chargement de tous les sites (un message s'affiche sur la carte).
 
 ## Organisation du code
