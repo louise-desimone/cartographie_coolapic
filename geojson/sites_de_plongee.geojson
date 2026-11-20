@@ -8,7 +8,16 @@
       "properties": {
         "nom": "La Balise (Cannonier sud)",
         "ville": "La Ciotat",
-        "commentaire": ""
+        "commentaire": "",
+        "profondeur": {
+          "source": "Litto3D PACA 2015 (1 m)",
+          "reference": "IGN69",
+          "rayon_m": 30,
+          "point_m": 5.4,
+          "min_m": 0.1,
+          "max_m": 26.9,
+          "a_terre": false
+        }
       },
       "geometry": {
         "type": "Point",
@@ -25,7 +34,16 @@
         "nom": "Petite Calanque",
         "ville": "La Ciotat",
         "commentaire": "",
-        "photo": "jpeg/IMG-20261114-WA0005.jpg"
+        "photo": "jpeg/IMG-20261114-WA0005.jpg",
+        "profondeur": {
+          "source": "Litto3D PACA 2015 (1 m)",
+          "reference": "IGN69",
+          "rayon_m": 30,
+          "point_m": 9.9,
+          "min_m": 0.0,
+          "max_m": 14.9,
+          "a_terre": false
+        }
       },
       "geometry": {
         "type": "Point",
@@ -41,7 +59,12 @@
       "properties": {
         "nom": "Les Moyades",
         "ville": "Marseille",
-        "commentaire": ""
+        "commentaire": "",
+        "profondeur": {
+          "source": "MNT de façade HOMONIM, Shom (100 m)",
+          "reference": "niveau moyen",
+          "point_m": 11.4
+        }
       },
       "geometry": {
         "type": "Point",
@@ -121,7 +144,12 @@
       "properties": {
         "nom": "Pointe de la Galère",
         "ville": "Hyères",
-        "commentaire": ""
+        "commentaire": "",
+        "profondeur": {
+          "source": "MNT de façade HOMONIM, Shom (100 m)",
+          "reference": "niveau moyen",
+          "point_m": 9.2
+        }
       },
       "geometry": {
         "type": "Point",
@@ -137,7 +165,12 @@
       "properties": {
         "nom": "Les Pyramides",
         "ville": "Fréjus",
-        "commentaire": ""
+        "commentaire": "",
+        "profondeur": {
+          "source": "MNT de façade HOMONIM, Shom (100 m)",
+          "reference": "niveau moyen",
+          "point_m": 30.7
+        }
       },
       "geometry": {
         "type": "Point",
@@ -169,7 +202,16 @@
       "properties": {
         "nom": "Seynerolles",
         "ville": "La Ciotat",
-        "commentaire": ""
+        "commentaire": "",
+        "profondeur": {
+          "source": "Litto3D PACA 2015 (1 m)",
+          "reference": "IGN69",
+          "rayon_m": 30,
+          "point_m": 15.4,
+          "min_m": 0.0,
+          "max_m": 16.6,
+          "a_terre": false
+        }
       },
       "geometry": {
         "type": "Point",
@@ -217,7 +259,12 @@
       "properties": {
         "nom": "Les Pharillons",
         "ville": "Marseille",
-        "commentaire": ""
+        "commentaire": "",
+        "profondeur": {
+          "source": "MNT de façade HOMONIM, Shom (100 m)",
+          "reference": "niveau moyen",
+          "point_m": 13.3
+        }
       },
       "geometry": {
         "type": "Point",

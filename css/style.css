@@ -824,6 +824,12 @@ a:focus-visible {
     margin: 6px 0 0;
 }
 
+.popup-site-plongee .source-profondeur {
+    margin-top: 2px;
+    color: #6b7c8c;
+    font-size: 0.72rem;
+}
+
 .lien-photo-site {
     display: block;
     margin-top: 8px;

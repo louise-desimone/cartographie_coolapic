@@ -77,6 +77,25 @@ Les coordonnées sont dans l'ordre **longitude, latitude**. La propriété
 `photo` est facultative. Une fiche invalide
 empêche le chargement de tous les sites (un message s'affiche sur la carte).
 
+## Profondeur des sites
+
+La profondeur affichée dans la fiche des sites est calculée à l'avance par
+`outils/profondeur_sites.py`, à relancer après l'ajout d'un site. Le script lit
+le MNT Litto3D à 1 m (IGN / Shom) : profondeur au point et plage de profondeurs
+dans un rayon de 30 m (réglage `RAYON_M`). Sans Litto3D, il se rabat sur le MNT
+de façade HOMONIM à 100 m. Il s'exécute avec le Python d'ArcGIS Pro (GDAL) :
+
+```powershell
+& "C:\Program Files\ArcGIS\Proin\Python\envsrcgispro-py3\python.exe" outils\profondeur_sites.py
+```
+
+- `--inventaire` liste les paquets Litto3D nécessaires ;
+- `--telecharger` les télécharge depuis le Shom (environ 80 Mo chacun,
+  7-Zip requis), hors du dépôt, dans `calcul_profondeur/litto3d_sites`.
+
+Les données sources ne sont pas dans le dépôt : le script les cherche dans le
+dossier parent (`la_ciotat/`, `calcul_profondeur/`, `data/`).
+
 ## Organisation du code
 
 Les scripts sont chargés dans cet ordre par `cartographie_coolapic.html` ;
@@ -93,6 +112,7 @@ chacun peut utiliser ce que définissent les précédents.
 | `js/biodiversite-ofb.js` | Flux WFS de l'OFB, couleurs des habitats, légende. |
 | `js/controle-couches.js` | Panneau des couches, curseurs d'opacité, mémorisation des choix. |
 | `js/application.js` | Démarrage. |
+| `outils/profondeur_sites.py` | Calcul de la profondeur des sites (Litto3D, HOMONIM). |
 | `css/style.css` | Présentation, organisée par zones de la page. |
 
 Après une modification, changer le paramètre `?v=` des fichiers dans

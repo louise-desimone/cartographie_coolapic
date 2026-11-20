@@ -43,6 +43,11 @@ function siteEstValide(entite) {
             // Photo facultative : chemin d'une image du site.
             (proprietes.photo === undefined ||
                 typeof proprietes.photo === "string") &&
+            // Profondeur facultative, écrite par outils/profondeur_sites.py.
+            (proprietes.profondeur === undefined ||
+                Number.isFinite(
+                    proprietes.profondeur && proprietes.profondeur.point_m
+                )) &&
             geometrie &&
             geometrie.type === "Point" &&
             Array.isArray(coordonnees) &&
@@ -66,11 +71,32 @@ function validerCollectionSites(collection) {
     }
 }
 
+function metres(valeur) {
+    return valeur.toLocaleString("fr-FR", { maximumFractionDigits: 1 }) + " m";
+}
+
+// Profondeur calculée par outils/profondeur_sites.py (Litto3D ou HOMONIM).
+function ajouterProfondeur(contenu, profondeur) {
+    let texte = "Profondeur : " + metres(profondeur.point_m) + " au point";
+    if (Number.isFinite(profondeur.min_m) && Number.isFinite(profondeur.max_m)) {
+        texte +=
+            ", de " + metres(profondeur.min_m) + " à " + metres(profondeur.max_m) +
+            " dans un rayon de " + profondeur.rayon_m + " m";
+    }
+    L.DomUtil.create("p", "", contenu).textContent = texte;
+    L.DomUtil.create("p", "source-profondeur", contenu).textContent =
+        "Source : " + profondeur.source + ", référence " + profondeur.reference +
+        ". Valeurs indicatives.";
+}
+
 function creerPopupSite(proprietes) {
     const contenu = L.DomUtil.create("div", "popup-site-plongee");
     L.DomUtil.create("strong", "", contenu).textContent = proprietes.nom;
     L.DomUtil.create("p", "", contenu).textContent =
         "Ville : " + (proprietes.ville || "À préciser");
+    if (proprietes.profondeur) {
+        ajouterProfondeur(contenu, proprietes.profondeur);
+    }
     if (proprietes.commentaire) {
         L.DomUtil.create("p", "", contenu).textContent =
             "Commentaire : " + proprietes.commentaire;
